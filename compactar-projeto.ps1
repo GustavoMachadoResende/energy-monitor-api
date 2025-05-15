@@ -4,18 +4,23 @@ $backendPath = ".\backend"
 # Nome do arquivo zip de saída (salvo na raiz)
 $zipFileName = "ac-a7-web-mobile.zip"
 
-# Itens obrigatórios dentro de /backend
-$itensParaCompactar = @(
+# Itens obrigatórios DENTRO de /backend
+$itensBackend = @(
     "src",
     "test",
     "package.json",
     "tsconfig.json",
-    "nest-cli.json",
-    "github.txt"
+    "nest-cli.json"
 )
 
-# Caminho completo dos itens
-$itensCompletos = $itensParaCompactar | ForEach-Object { Join-Path $backendPath $_ }
+# Caminho completo dos itens da pasta backend
+$itensBackendCompletos = $itensBackend | ForEach-Object { Join-Path $backendPath $_ }
+
+# Caminho do github.txt (na raiz do projeto)
+$githubTxt = ".\github.txt"
+
+# Lista final de itens a serem compactados
+$itensParaCompactar = $itensBackendCompletos + $githubTxt
 
 # Remover ZIP existente, se houver
 if (Test-Path $zipFileName) {
@@ -23,6 +28,6 @@ if (Test-Path $zipFileName) {
 }
 
 # Compactar os arquivos
-Compress-Archive -Path $itensCompletos -DestinationPath $zipFileName
+Compress-Archive -Path $itensParaCompactar -DestinationPath $zipFileName
 
-Write-Host "Compactação concluída: $zipFileName"
+Write-Host "✅ Compactação concluída: $zipFileName"
